@@ -8,9 +8,6 @@ sub startup ($self) {
   # Load configuration from config file
   my $config = $self->plugin( 'NotYAMLConfig' );
 
-  # Configure the application
-  $self->secrets( $config->{'secrets'} );
-
   # Prepare data
   $self->_prepare_data;
 
@@ -22,7 +19,7 @@ sub startup ($self) {
 
   # Done?
   if ( $self->postnr->{'7633'} ) {
-    $self->log->debug( 'Application started successfully!' );
+    $self->log->debug( 'Application started successfully with ' . scalar(keys %{$self->postnr}) . ' postal codes!' );
   }
   else {
     $self->log->error( 'Failed to start application because of missing data!' );
@@ -32,7 +29,7 @@ sub startup ($self) {
 
 # Creates a helper out of Bring's data
 sub _prepare_data ($self) {
-  my $data  = $self->ua->get( 'https://www.bring.no/postnummerregister-ansi.txt' )->res->body;
+  my $data  = $self->ua->get( $self->config->{'bring_url'} )->res->body;
   my @lines = map { trim($_) } split( /\n+/, $data );
 
   my %postnr = ();
