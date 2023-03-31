@@ -3,7 +3,10 @@ use Mojo::Base -strict;
 use Test::More;
 use Test::Mojo;
 
-my $t = Test::Mojo->new('Postnr');
-$t->get_ok('/')->status_is(200)->content_like(qr/Mojolicious/i);
+my $t = Test::Mojo->new( 'Postnr' );
 
-done_testing();
+$t->get_ok( '/7633'  )->status_is( 200 );
+$t->get_ok( '/76331' )->status_is( 400 );
+$t->get_ok( '/7636'  )->status_is( 404 );
+
+done_testing;
