@@ -30,12 +30,14 @@ sub startup ($self) {
 # Creates a helper out of Bring's data
 sub _prepare_data ($self) {
   my $data  = $self->ua->get( $self->config->{'bring_url'} )->res->body;
-  my @lines = map { trim($_) } split( /\n+/, $data );
+  my @lines = map { trim($_) } split( /\n+/, ($data // '') );
 
   my %postnr = ();
 
   foreach ( @lines ) {
     my @fields = split( /\t+/, $_ );
+
+    next unless ( @fields );
 
     $postnr{ $fields[0] } = {
       'postnummer'  => $fields[0],
