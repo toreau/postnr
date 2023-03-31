@@ -9,6 +9,7 @@ sub index ($self) {
   }
 
   my $data = $self->postnr->{$postnr};
+
   unless ( $data ) {
     return $self->_render_error( 404, $postnr . ' was not found!' );
   }
